@@ -69,7 +69,7 @@ h1 {
   font-size: clamp(1.6rem, 5vw, 2.2rem);
   font-weight: 700;
   letter-spacing: -0.5px;
-  background: linear-gradient(135deg, #fff 30%, #9ab4f5);
+  background: linear-gradient(135deg, var(--text) 30%, #9ab4f5);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -401,4 +401,74 @@ footer {
     opacity: 1;
     transform: none;
   }
+}
+
+/* Smooth transitions for theme changes */
+body,
+.wrap,
+header,
+.song-card,
+.date-header,
+input[type=search],
+select,
+.chip,
+.btn,
+.icon-btn,
+.date-badge {
+    transition: background-color 220ms ease, color 220ms ease, border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease;
+}
+
+/* Theme toggle button visuals */
+.icon-btn#theme-toggle {
+    width: 42px;
+    padding: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card);
+    border: 1px solid var(--border2);
+    color: var(--text3);
+}
+
+/* Highlight toggle when light mode active via body class or data-theme */
+body.light .icon-btn#theme-toggle,
+html[data-theme="light"] .icon-btn#theme-toggle {
+    background: var(--card2);
+    border-color: var(--border);
+    color: var(--text);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+/* Slightly different hover for contrast in both themes */
+.icon-btn#theme-toggle:hover {
+    transform: translateY(-1px);
+}
+
+/* Ensure the grid overlay adapts smoothly in light mode */
+body::before,
+body.light::before,
+html[data-theme="light"] body::before {
+    transition: background-image 220ms ease, opacity 220ms ease;
+}
+
+/* Ensure light theme vars apply when html has data-theme or body has .light */
+:root[data-theme="light"],
+body.light {
+  --bg: #f7f9fc;
+  --card: #ffffff;
+  --card2: #f3f6fb;
+  --border: #e6eef9;
+  --border2: #dbe6f5;
+  --accent: #2563eb;
+  --accent-glow: rgba(37,99,235,0.06);
+  --gold: #b45309;
+  --text: #0f172a;
+  --text2: #475569;
+  --text3: #6b7280;
+}
+
+/* Force body background to use updated var in case of specificity issues */
+body.light,
+html[data-theme="light"] body {
+  background: var(--bg);
 }

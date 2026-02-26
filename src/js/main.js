@@ -51,6 +51,44 @@ function isUrl(s) {
   return t.startsWith('http://') || t.startsWith('https://') || t.startsWith('www.');
 }
 
+// Theme toggle logic
+const THEME_KEY = 'repertorio_theme';
+
+function applyTheme(theme) {
+    if (theme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        document.body.classList.add('light');
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+        document.body.classList.remove('light');
+    }
+    const btn = document.getElementById('theme-toggle');
+    if (btn) {
+        btn.textContent = (theme === 'light') ? '🌙' : '☀️';
+        btn.title = (theme === 'light') ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro';
+    }
+    try { localStorage.setItem(THEME_KEY, theme); } catch (e) { /* ignore */ }
+}
+
+function toggleTheme() {
+    const current = document.body.classList.contains('light') ? 'light' : 'dark';
+    applyTheme(current === 'light' ? 'dark' : 'light');
+}
+
+function initTheme() {
+    let saved = null;
+    try { saved = localStorage.getItem(THEME_KEY); } catch (e) { /* ignore */ }
+    if (!saved) {
+        saved = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+    }
+    applyTheme(saved);
+    const btn = document.getElementById('theme-toggle');
+    if (btn) btn.addEventListener('click', toggleTheme);
+}
+
+// initialize theme before loading data
+initTheme();
+
 async function load() {
   document.getElementById('main').innerHTML = '<div class="loading"><div class="spinner"></div><p>Cargando...</p></div>';
   try {
