@@ -1,0 +1,15 @@
+{
+  "name": "separated-index-project",
+  "version": "1.0.0",
+  "description": "A project that separates HTML, CSS, and JavaScript into different files.",
+  "main": "src/js/main.js",
+  "scripts": {
+    "start": "live-server src"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "live-server": "^1.2.1"
+  }
+}

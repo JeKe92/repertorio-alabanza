@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Repertorio de Alabanzas</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">
+      <img src="assets/logo.png" alt="logo">
+    </div>
+    <h1>Repertorio de Alabanzas</h1>
+    <p class="tagline" id="tagline">Conectando...</p>
+  </header>
+  <div class="controls">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="search" id="search" placeholder="Buscar canción..." oninput="render()">
+    </div>
+    <div class="sel-wrap">
+      <select id="fdate" onchange="render()">
+        <option value="">Todas las fechas</option>
+      </select>
+    </div>
+    <button class="icon-btn" onclick="load()" title="Actualizar">↻</button>
+  </div>
+  <div class="stats" id="stats"></div>
+  <div id="main">
+    <div class="loading"><div class="spinner"></div><p>Cargando canciones...</p></div>
+  </div>
+  <footer>Datos en tiempo real · Google Sheets</footer>
+</div>
+
+<script src="js/main.js" defer></script>
+</body>
+</html>
