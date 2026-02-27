@@ -139,7 +139,8 @@ async function load() {
           guitarAc: g(11),
           bass: g(12),
           piano: g(13),
-          guitarEl: g(14)
+          guitarEl: g(14),
+          voces: g(15)
         };
       });
 
@@ -186,9 +187,24 @@ function render() {
 
   var groups = {}, order = [];
   filtered.forEach(function(s) {
-    if (!groups[s.dk]) { groups[s.dk] = { label: s.dl, list: [] }; order.push(s.dk); }
+    if (!groups[s.dk]) {
+      groups[s.dk] = { label: s.dl, list: [], musicians: '' };
+      order.push(s.dk);
+    }
     groups[s.dk].list.push(s);
+    // Use the first song of the group to build per-instrument musicians HTML
+    if (!groups[s.dk].musicians) {
+      var parts = [];
+      if (s.drumer)   parts.push('<span class="musicians-item"><span class="instr">Batería:</span> <span class="musician">' + escapeHtml(s.drumer) + '</span></span>');
+      if (s.guitarAc) parts.push('<span class="musicians-item"><span class="instr">G. Acústica:</span> <span class="musician">' + escapeHtml(s.guitarAc) + '</span></span>');
+      if (s.bass)     parts.push('<span class="musicians-item"><span class="instr">Bajo:</span> <span class="musician">' + escapeHtml(s.bass) + '</span></span>');
+      if (s.piano)    parts.push('<span class="musicians-item"><span class="instr">Piano:</span> <span class="musician">' + escapeHtml(s.piano) + '</span></span>');
+      if (s.guitarEl) parts.push('<span class="musicians-item"><span class="instr">G. Eléctrica:</span> <span class="musician">' + escapeHtml(s.guitarEl) + '</span></span>');
+      if (s.voces)    parts.push('<span class="musicians-item"><span class="instr">Voces:</span> <span class="musician">' + escapeHtml(s.voces) + '</span></span>');
+      groups[s.dk].musicians = parts.join(' <span class="dot-sep">·</span> ');
+    }
   });
+  console.log(groups);
 
   var iDoc = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
   var iYT  = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>';
@@ -197,26 +213,20 @@ function render() {
   order.forEach(function(dk) {
     var group = groups[dk];
     html += '<div class="date-group"><div class="date-header"><span class="date-badge">' + group.label + '</span><span class="date-count">' + group.list.length + ' canci' + (group.list.length===1?'ón':'ones') + '</span><div class="hline"></div></div>';
+    if (group.musicians) {
+      html += '<div class="musicians">' + group.musicians + '</div>';
+    }
 
     group.list.forEach(function(s, i) {
       var meta = '';
       if (s.tonA) meta += '<span class="meta-label">Ton</span><span class="tone-chip">' + s.tonA + '</span>';
       if (s.tonB) meta += '<span class="dot"> · </span><span class="meta-label">Alt</span><span class="tone-alt">' + s.tonB + '</span>';
-
-      var musicos = '';
-
-      if (s.vozPpal) musicos += '<span class="meta-label">Voz principal: ' + s.vozPpal + '</span>';
-      if (s.drumer) musicos += '<span class="dot"> · </span><span class="meta-label">Batería: ' + s.drumer + '</span>';
-      if (s.guitarAc) musicos += '<span class="dot"> · </span><span class="meta-label">G. Acústica: ' + s.guitarAc + '</span>';
-      if (s.bass) musicos += '<span class="dot"> · </span><span class="meta-label">Bajo: ' + s.bass + '</span>';
-      if (s.piano) musicos += '<span class="dot"> · </span><span class="meta-label">Piano: ' + s.piano + '</span>';
-      if (s.guitarEl) musicos += '<span class="dot"> · </span><span class="meta-label">G. Eléctrica: ' + s.guitarEl + '</span>';
-
+      if (s.vozPpal) meta += '<span class="dot"> · </span><span class="meta-label">Voz principal: </span><span class="main-voice">' + s.vozPpal + '</span>';
 
       var btnA = s.acordes ? '<a class="btn btn-acordes" href="' + s.acordes + '" target="_blank" rel="noopener">' + iDoc + ' Acordes</a>' : '';
       var btnY = s.yt      ? '<a class="btn btn-yt"      href="' + s.yt      + '" target="_blank" rel="noopener">' + iYT  + ' YouTube</a>' : '';
 
-      html += '<div class="song-card" style="animation-delay:' + (i*0.03) + 's"><div class="song-name">' + s.name + '</div>' + (meta ? '<div class="meta-row">' + meta + '</div>' : '') + '<div class="musicos-row">' + musicos + '</div><div class="actions">' + btnA + btnY + '</div></div>';
+      html += '<div class="song-card" style="animation-delay:' + (i*0.03) + 's"><div class="song-name">' + s.name + '</div>' + (meta ? '<div class="meta-row">' + meta + '</div>' : '') + '<div class="actions">' + btnA + btnY + '</div></div>';
     });
 
     html += '</div>';
@@ -226,3 +236,10 @@ function render() {
 }
 
 load();
+
+// helper to escape HTML (prevents ReferenceError and XSS)
+function escapeHtml(str) {
+  return String(str || '').replace(/[&<>"']/g, function(m){
+    return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]);
+  });
+}

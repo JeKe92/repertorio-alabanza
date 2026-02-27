@@ -10,6 +10,7 @@
   --text: #eef0f6;
   --text2: #9ba3be;
   --text3: #5c6480;
+  --text4: #99ffdf;  
 }
 
 * {
@@ -276,13 +277,26 @@ select:focus {
   flex-wrap: wrap;
 }
 
-.musicos-row {
+.musicians {
+  margin: 6px 0 12px;
+  color: var(--text2);
+  font-size: 0.92rem;
   display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 12px;
   flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
 }
+.musicians .musicians-item { display:inline-flex; gap:8px; align-items:center; white-space:nowrap; }
+.musicians .instr { color: var(--text3); font-weight:700; font-size:0.86rem; }
+.musicians .musician {
+  background: rgba(91,141,238,0.12);
+  color: var(--accent);
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-weight:700;
+  font-size:0.88rem;
+}
+.musicians .dot-sep { color: var(--border2); margin: 0 6px; }
 
 .meta-label {
   font-size: 0.65rem;
@@ -306,6 +320,17 @@ select:focus {
 .tone-alt {
   background: rgba(255,255,255,0.05);
   color: var(--text2);
+  border: 1px solid var(--border2);
+  border-radius: 7px;
+  padding: 3px 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: 'Sora', sans-serif;
+}
+
+.main-voice {
+  background: rgba(127, 255, 212,0.50);
+  color: var(--text4);
   border: 1px solid var(--border2);
   border-radius: 7px;
   padding: 3px 10px;
@@ -473,6 +498,7 @@ body.light {
   --text: #0f172a;
   --text2: #475569;
   --text3: #6b7280;
+  --text4: #00b377;
 }
 
 /* Force body background to use updated var in case of specificity issues */
