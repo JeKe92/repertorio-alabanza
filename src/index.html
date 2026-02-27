@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Repertorio de Alabanzas</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> <!-- Google Material Icons -->
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -18,7 +19,7 @@
   </header>
   <div class="controls">
     <div class="search-wrap">
-      <span class="search-icon">🔍</span>
+      <span class="material-icons search-icon" aria-hidden="true">search</span>
       <input type="search" id="search" placeholder="Buscar canción..." oninput="render()">
     </div>
     <div class="sel-wrap">
@@ -26,9 +27,11 @@
         <option value="">Todas las fechas</option>
       </select>
     </div>
-    <button class="icon-btn" onclick="load()" title="Actualizar">↻</button>
+    <button class="icon-btn" onclick="load()" title="Actualizar"><span class="material-icons" aria-hidden="true">refresh</span></button>
     <!-- Theme toggle -->
-    <button id="theme-toggle" class="icon-btn" title="Cambiar tema">☀️</button>
+    <button id="theme-toggle" class="icon-btn" title="Cambiar tema">
+      <span class="material-icons" id="theme-icon">light_mode</span>
+    </button>
   </div>
   <div class="stats" id="stats"></div>
   <div id="main">

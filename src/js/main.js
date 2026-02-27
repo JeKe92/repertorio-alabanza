@@ -12,6 +12,12 @@ let songs = [];
 // 6 = Tonalidad B
 // 7 = Acordes URL
 // 8 = YouTube URL
+// 9 = vozPpal
+// 10 = drumer
+// 11 = guitarAc
+// 12 = Bass
+// 13 = piano
+// 12 = guitarEl
 
 function parseDateText(s) {
   if (!s) return null;
@@ -63,9 +69,13 @@ function applyTheme(theme) {
         document.body.classList.remove('light');
     }
     const btn = document.getElementById('theme-toggle');
+    const icon = document.getElementById('theme-icon');
     if (btn) {
-        btn.textContent = (theme === 'light') ? '🌙' : '☀️';
         btn.title = (theme === 'light') ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro';
+    }
+    if (icon) {
+        // use material icons names: light_mode / dark_mode
+        icon.textContent = (theme === 'light') ? 'dark_mode' : 'light_mode';
     }
     try { localStorage.setItem(THEME_KEY, theme); } catch (e) { /* ignore */ }
 }
@@ -123,7 +133,13 @@ async function load() {
           tonA: extractKey(g(5)),
           tonB: (tonBRaw && tonBRaw.toLowerCase() !== 'no encontrado') ? extractKey(tonBRaw) : '',
           acordes: isUrl(acordesRaw) ? acordesRaw : '',
-          yt: isUrl(ytRaw) ? ytRaw : ''
+          yt: isUrl(ytRaw) ? ytRaw : '',
+          vozPpal: g(9),
+          drumer: g(10),
+          guitarAc: g(11),
+          bass: g(12),
+          piano: g(13),
+          guitarEl: g(14)
         };
       });
 
@@ -187,10 +203,20 @@ function render() {
       if (s.tonA) meta += '<span class="meta-label">Ton</span><span class="tone-chip">' + s.tonA + '</span>';
       if (s.tonB) meta += '<span class="dot"> · </span><span class="meta-label">Alt</span><span class="tone-alt">' + s.tonB + '</span>';
 
+      var musicos = '';
+
+      if (s.vozPpal) musicos += '<span class="meta-label">Voz principal: ' + s.vozPpal + '</span>';
+      if (s.drumer) musicos += '<span class="dot"> · </span><span class="meta-label">Batería: ' + s.drumer + '</span>';
+      if (s.guitarAc) musicos += '<span class="dot"> · </span><span class="meta-label">G. Acústica: ' + s.guitarAc + '</span>';
+      if (s.bass) musicos += '<span class="dot"> · </span><span class="meta-label">Bajo: ' + s.bass + '</span>';
+      if (s.piano) musicos += '<span class="dot"> · </span><span class="meta-label">Piano: ' + s.piano + '</span>';
+      if (s.guitarEl) musicos += '<span class="dot"> · </span><span class="meta-label">G. Eléctrica: ' + s.guitarEl + '</span>';
+
+
       var btnA = s.acordes ? '<a class="btn btn-acordes" href="' + s.acordes + '" target="_blank" rel="noopener">' + iDoc + ' Acordes</a>' : '';
       var btnY = s.yt      ? '<a class="btn btn-yt"      href="' + s.yt      + '" target="_blank" rel="noopener">' + iYT  + ' YouTube</a>' : '';
 
-      html += '<div class="song-card" style="animation-delay:' + (i*0.03) + 's"><div class="song-name">' + s.name + '</div>' + (meta ? '<div class="meta-row">' + meta + '</div>' : '') + '<div class="actions">' + btnA + btnY + '</div></div>';
+      html += '<div class="song-card" style="animation-delay:' + (i*0.03) + 's"><div class="song-name">' + s.name + '</div>' + (meta ? '<div class="meta-row">' + meta + '</div>' : '') + '<div class="musicos-row">' + musicos + '</div><div class="actions">' + btnA + btnY + '</div></div>';
     });
 
     html += '</div>';

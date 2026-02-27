@@ -276,6 +276,14 @@ select:focus {
   flex-wrap: wrap;
 }
 
+.musicos-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
 .meta-label {
   font-size: 0.65rem;
   font-weight: 600;
