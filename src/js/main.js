@@ -108,9 +108,6 @@ async function load() {
     const j = JSON.parse(t.slice(47, -2));
     const rows = j.table.rows;
 
-    // DEBUG: log first row columns
-    if (rows[0]) { rows[0].c.forEach(function(c,i){ console.log('col['+i+']:', c ? String(c.v).substring(0,60) : 'NULL'); }); }
-
     songs = rows
       .filter(function(r) { return r.c[4] && r.c[4].v && !String(r.c[4].v).startsWith('http'); })
       .map(function(r) {
@@ -200,11 +197,17 @@ function render() {
       if (s.bass)     parts.push('<span class="musicians-item"><span class="instr">Bajo:</span> <span class="musician">' + escapeHtml(s.bass) + '</span></span>');
       if (s.piano)    parts.push('<span class="musicians-item"><span class="instr">Piano:</span> <span class="musician">' + escapeHtml(s.piano) + '</span></span>');
       if (s.guitarEl) parts.push('<span class="musicians-item"><span class="instr">G. Eléctrica:</span> <span class="musician">' + escapeHtml(s.guitarEl) + '</span></span>');
-      if (s.voces)    parts.push('<span class="musicians-item"><span class="instr">Voces:</span> <span class="musician">' + escapeHtml(s.voces) + '</span></span>');
-      groups[s.dk].musicians = parts.join(' <span class="dot-sep">·</span> ');
+      if (s.voces) {
+        const vocals = String(s.voces).split(/[;,]+/).map(function(x){ return x.trim(); }).filter(Boolean);
+        if (vocals.length) {
+          const vocalTags = vocals.map(function(v){ return '<span class="musician">' + escapeHtml(v) + '</span>'; }).join(' ');
+          parts.push('<span class="musicians-item vocals"><span class="instr">Voces:</span> ' + vocalTags + '</span>');
+        }
+      }
+      // join without inserting dot spans; separator will be rendered via CSS pseudo-element
+      groups[s.dk].musicians = parts.join(' ');
     }
   });
-  console.log(groups);
 
   var iDoc = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
   var iYT  = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>';

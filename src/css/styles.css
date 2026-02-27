@@ -308,7 +308,7 @@ select:focus {
 
 .tone-chip {
   background: rgba(91,141,238,0.12);
-  color: #8ab0f5;
+  color: var(--accent);
   border: 1px solid rgba(91,141,238,0.25);
   border-radius: 7px;
   padding: 3px 10px;
@@ -366,7 +366,7 @@ select:focus {
 
 .btn-acordes {
   background: rgba(91,141,238,0.1);
-  color: #8ab0f5;
+  color: var(--accent);
   border-color: rgba(91,141,238,0.25);
 }
 
@@ -505,4 +505,19 @@ body.light {
 body.light,
 html[data-theme="light"] body {
   background: var(--bg);
+}
+
+/* allow the 'Voces' group to wrap onto multiple lines */
+.musicians .musicians-item.vocals {
+  white-space: normal;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+/* spacing for each vocalist tag when wrapping */
+.musicians .musicians-item.vocals .musician {
+  margin-right: 6px;
+  margin-bottom: 4px;
 }
